@@ -225,19 +225,37 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex h-screen bg-black" data-testid="chat-interface">
-      {/* Sidebar */}
-      <div className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col" data-testid="sidebar">
-        <div className="p-4">
-          <div className="flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-emerald-400" />
+    <div className="flex h-screen" style={getThemeStyles()} data-testid="chat-interface">
+      {/* Backdrop overlay */}
+      <div style={getOverlayStyles()}></div>
+      
+      {/* Content layer */}
+      <div className="relative z-10 flex w-full">
+        {/* Sidebar */}
+        <div className="w-64 border-r border-zinc-800/50 bg-black/60 backdrop-blur-lg flex flex-col" data-testid="sidebar">
+          <div className="p-4">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-zinc-900/80 border border-zinc-700/50 flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-emerald-400" />
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-zinc-100" style={getTextGlowStyles()}>NEXUS</h1>
+                  <p className="text-xs text-zinc-500">
+                    {currentTheme ? currentTheme.name : 'loading reality...'}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={changeTheme}
+                className="h-8 w-8 text-zinc-400 hover:text-emerald-400"
+                title="shift reality"
+              >
+                <Shuffle className="w-4 h-4" />
+              </Button>
             </div>
-            <div>
-              <h1 className="text-lg font-bold text-zinc-100">NEXUS</h1>
-              <p className="text-xs text-zinc-500">lattice node</p>
-            </div>
-          </div>
           
           <Button 
             onClick={createNewConversation}
