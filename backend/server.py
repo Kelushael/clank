@@ -454,6 +454,89 @@ async def get_clank_capabilities():
     except Exception as e:
         return {"error": str(e)}
 
+# File Upload & Analysis
+@api_router.post("/files/upload")
+async def upload_file(file: UploadFile = File(...)):
+    """Upload file for analysis"""
+    try:
+        # Validate file type
+        allowed_extensions = {'.pdf', '.docx', '.txt', '.md', '.csv', '.json', '.xml',
+                            '.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif',
+                            '.py', '.js', '.html', '.css', '.jsx', '.ts', '.tsx',
+                            '.xlsx', '.pptx'}
+        
+        file_ext = Path(file.filename).suffix.lower()
+        if file_ext not in allowed_extensions:
+            raise HTTPException(status_code=400, detail=f"File type {file_ext} not supported")
+        
+        # Save file
+        file_path = UPLOADS_DIR / f"{uuid.uuid4()}_{file.filename}"
+        with open(file_path, "wb") as buffer:
+            content = await file.read()
+            buffer.write(content)
+        
+        # Store file metadata in DB
+        file_record = {
+            "id": str(uuid.uuid4()),
+            "original_name": file.filename,
+            "file_path": str(file_path),
+            "file_size": len(content),
+            "content_type": file.content_type,
+            "uploaded_at": datetime.now(timezone.utc).isoformat()
+        }
+        await db.uploaded_files.insert_one(file_record)
+        
+        return {
+            "success": True,
+            "file_id": file_record["id"],
+            "filename": file.filename,
+            "file_path": str(file_path),
+            "message": f"Uploaded {file.filename}. You can now ask me to analyze it!"
+        }
+        
+    except Exception as e:
+        logging.error(f"File upload failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/files/analyze/{file_id}")
+async def analyze_uploaded_file(file_id: str, analysis_request: Optional[str] = "analyze this file"):
+    """Analyze an uploaded file using Clank"""
+    try:
+        # Get file record
+        file_record = await db.uploaded_files.find_one({"id": file_id}, {"_id": 0})
+        if not file_record:
+            raise HTTPException(status_code=404, detail="File not found")
+        
+        # Create analysis request for Clank
+        clank_request = f"Analyze the uploaded file '{file_record['original_name']}': {analysis_request}"
+        
+        clank = get_clank_agent()
+        response = await clank.process_message(
+            user_message=clank_request,
+            conversation_id=f"file-analysis-{file_id}",
+            conversation_context=[],
+            user_preferences={"file_path": file_record["file_path"]}
+        )
+        
+        return {
+            "success": True,
+            "analysis": response.content,
+            "file_name": file_record["original_name"]
+        }
+        
+    except Exception as e:
+        logging.error(f"File analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/files")
+async def list_uploaded_files():
+    """List all uploaded files"""
+    try:
+        files = await db.uploaded_files.find({}, {"_id": 0}).sort("uploaded_at", -1).limit(50).to_list(50)
+        return {"files": files}
+    except Exception as e:
+        return {"error": str(e)}
+
 app.include_router(api_router)
 
 app.add_middleware(
