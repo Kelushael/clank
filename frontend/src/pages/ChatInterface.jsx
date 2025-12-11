@@ -512,6 +512,7 @@ const ChatInterface = () => {
           </TabsContent>
         </Tabs>
       </div>
+      </div>
     </div>
   );
 };
