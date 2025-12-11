@@ -327,7 +327,7 @@ const ChatInterface = () => {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4" data-testid="messages-container">
+                <div className="space-y-6" data-testid="messages-container">
                   {messages.map((msg, idx) => (
                     <div
                       key={idx}
@@ -339,8 +339,8 @@ const ChatInterface = () => {
                       <Card
                         className={`max-w-3xl p-4 ${
                           msg.role === 'user'
-                            ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg'
-                            : 'bg-white border-slate-200 shadow-sm'
+                            ? 'bg-zinc-950 border-emerald-400/30 text-zinc-100'
+                            : 'bg-zinc-950 border-zinc-800 text-zinc-200'
                         }`}
                       >
                         {msg.role === 'user' ? (
