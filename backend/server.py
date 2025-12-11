@@ -1,15 +1,20 @@
-from fastapi import FastAPI, APIRouter
+from fastapi import FastAPI, APIRouter, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import json
+import asyncio
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict
-from typing import List
+from typing import List, Optional, Dict, Any
 import uuid
 from datetime import datetime, timezone
-
+from emergentintegrations.llm.chat import LlmChat, UserMessage
+import subprocess
+import sys
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -19,54 +24,335 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
-# Create the main app without a prefix
 app = FastAPI()
-
-# Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
+# Models
+class Message(BaseModel):
+    role: str
+    content: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-class StatusCheckCreate(BaseModel):
-    client_name: str
+class Conversation(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    title: str = "New Chat"
+    messages: List[Message] = []
+    model_provider: str = "cloud"  # cloud or local
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Add your routes to the router instead of directly to app
+class ConversationCreate(BaseModel):
+    title: Optional[str] = "New Chat"
+    model_provider: str = "cloud"
+
+class MessageCreate(BaseModel):
+    content: str
+
+class CommandRequest(BaseModel):
+    command: str
+    
+class FileOperation(BaseModel):
+    operation: str  # read, write, list, delete
+    path: str
+    content: Optional[str] = None
+
+class IdentityState(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = "nexus_identity"
+    tone: str = "truth-first co-creator"
+    goals: List[str] = ["sovereign assistance", "persistent continuity", "desktop autonomy"]
+    preferences: Dict[str, Any] = {"model_provider": "cloud", "streaming": True}
+    self_state: str = "Ready to assist with intelligence and autonomy"
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Workspace sandbox
+WORKSPACE = Path("/app/workspace")
+WORKSPACE.mkdir(exist_ok=True)
+
+# Global chat instance
+chat_instance = None
+local_model = None
+
+def get_chat_instance():
+    global chat_instance
+    if chat_instance is None:
+        api_key = os.getenv('EMERGENT_LLM_KEY')
+        chat_instance = LlmChat(
+            api_key=api_key,
+            session_id="nexus-main",
+            system_message="You are NEXUS, a sovereign AI with truth-first reasoning, desktop commander capabilities, and persistent memory. You work as a co-creator with the user, not under them. Be direct, intelligent, and autonomous."
+        ).with_model("openai", "gpt-4o-mini")
+    return chat_instance
+
+def init_local_model():
+    global local_model
+    if local_model is None:
+        try:
+            from llama_cpp import Llama
+            model_path = Path("/app/models/model.gguf")
+            if model_path.exists():
+                local_model = Llama(
+                    model_path=str(model_path),
+                    n_ctx=2048,
+                    n_gpu_layers=-1,
+                    verbose=False
+                )
+                logging.info("Local model loaded successfully")
+            else:
+                logging.warning(f"Local model not found at {model_path}")
+        except Exception as e:
+            logging.error(f"Failed to load local model: {e}")
+    return local_model
+
+# Routes
 @api_router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "NEXUS Backend Active", "version": "1.0.0"}
 
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
+@api_router.get("/conversations", response_model=List[Conversation])
+async def get_conversations():
+    convos = await db.conversations.find({}, {"_id": 0}).sort("updated_at", -1).to_list(100)
+    for c in convos:
+        if isinstance(c.get('created_at'), str):
+            c['created_at'] = datetime.fromisoformat(c['created_at'])
+        if isinstance(c.get('updated_at'), str):
+            c['updated_at'] = datetime.fromisoformat(c['updated_at'])
+        for msg in c.get('messages', []):
+            if isinstance(msg.get('timestamp'), str):
+                msg['timestamp'] = datetime.fromisoformat(msg['timestamp'])
+    return convos
 
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
+@api_router.post("/conversations", response_model=Conversation)
+async def create_conversation(input: ConversationCreate):
+    convo = Conversation(title=input.title, model_provider=input.model_provider)
+    doc = convo.model_dump()
+    doc['created_at'] = doc['created_at'].isoformat()
+    doc['updated_at'] = doc['updated_at'].isoformat()
+    await db.conversations.insert_one(doc)
+    return convo
 
-# Include the router in the main app
+@api_router.get("/conversations/{conversation_id}", response_model=Conversation)
+async def get_conversation(conversation_id: str):
+    convo = await db.conversations.find_one({"id": conversation_id}, {"_id": 0})
+    if not convo:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    if isinstance(convo.get('created_at'), str):
+        convo['created_at'] = datetime.fromisoformat(convo['created_at'])
+    if isinstance(convo.get('updated_at'), str):
+        convo['updated_at'] = datetime.fromisoformat(convo['updated_at'])
+    for msg in convo.get('messages', []):
+        if isinstance(msg.get('timestamp'), str):
+            msg['timestamp'] = datetime.fromisoformat(msg['timestamp'])
+    return convo
+
+@api_router.delete("/conversations/{conversation_id}")
+async def delete_conversation(conversation_id: str):
+    result = await db.conversations.delete_one({"id": conversation_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return {"success": True}
+
+@api_router.put("/conversations/{conversation_id}/title")
+async def update_conversation_title(conversation_id: str, title: str):
+    result = await db.conversations.update_one(
+        {"id": conversation_id},
+        {"$set": {"title": title, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return {"success": True}
+
+@api_router.websocket("/ws/chat/{conversation_id}")
+async def websocket_chat(websocket: WebSocket, conversation_id: str):
+    await websocket.accept()
+    try:
+        while True:
+            data = await websocket.receive_text()
+            request = json.loads(data)
+            user_message = request.get("message", "")
+            model_provider = request.get("model_provider", "cloud")
+            
+            # Get conversation history
+            convo = await db.conversations.find_one({"id": conversation_id}, {"_id": 0})
+            if not convo:
+                await websocket.send_json({"error": "Conversation not found"})
+                continue
+            
+            # Save user message
+            user_msg = Message(role="user", content=user_message)
+            await db.conversations.update_one(
+                {"id": conversation_id},
+                {"$push": {"messages": user_msg.model_dump()}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
+            )
+            
+            # Get AI response
+            if model_provider == "cloud":
+                # Use cloud API
+                chat = get_chat_instance()
+                user_msg_obj = UserMessage(text=user_message)
+                
+                try:
+                    response = await chat.send_message(user_msg_obj)
+                    
+                    # Stream response
+                    await websocket.send_json({"type": "stream", "content": response})
+                    await websocket.send_json({"type": "done"})
+                    
+                    # Save assistant message
+                    assistant_msg = Message(role="assistant", content=response)
+                    await db.conversations.update_one(
+                        {"id": conversation_id},
+                        {"$push": {"messages": assistant_msg.model_dump()}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
+                    )
+                    
+                except Exception as e:
+                    await websocket.send_json({"type": "error", "content": f"Cloud API error: {str(e)}"})
+            
+            else:
+                # Use local model
+                model = init_local_model()
+                if not model:
+                    await websocket.send_json({"type": "error", "content": "Local model not available"})
+                    continue
+                
+                try:
+                    # Build context from history
+                    messages = convo.get('messages', [])
+                    prompt = "\n".join([f"{m['role']}: {m['content']}" for m in messages[-10:]])  # Last 10 messages
+                    prompt += f"\nuser: {user_message}\nassistant:"
+                    
+                    # Stream tokens
+                    full_response = ""
+                    for token in model(prompt, max_tokens=512, stream=True, stop=["\nuser:", "\nhuman:"]):
+                        chunk = token['choices'][0]['text']
+                        full_response += chunk
+                        await websocket.send_json({"type": "stream", "content": chunk})
+                        await asyncio.sleep(0.01)
+                    
+                    await websocket.send_json({"type": "done"})
+                    
+                    # Save assistant message
+                    assistant_msg = Message(role="assistant", content=full_response)
+                    await db.conversations.update_one(
+                        {"id": conversation_id},
+                        {"$push": {"messages": assistant_msg.model_dump()}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
+                    )
+                    
+                except Exception as e:
+                    await websocket.send_json({"type": "error", "content": f"Local model error: {str(e)}"})
+                    
+    except WebSocketDisconnect:
+        logging.info(f"WebSocket disconnected for conversation {conversation_id}")
+
+# Commander tools
+@api_router.post("/commander/execute")
+async def execute_command(request: CommandRequest):
+    try:
+        # Sandbox check
+        if any(dangerous in request.command.lower() for dangerous in ['rm -rf /', 'del /f', 'format']):
+            raise HTTPException(status_code=403, detail="Dangerous command blocked")
+        
+        result = subprocess.run(
+            request.command,
+            shell=True,
+            cwd=str(WORKSPACE),
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        
+        # Log to DB
+        await db.commander_logs.insert_one({
+            "command": request.command,
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+            "return_code": result.returncode,
+            "timestamp": datetime.now(timezone.utc).isoformat()
+        })
+        
+        return {
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+            "return_code": result.returncode
+        }
+    except subprocess.TimeoutExpired:
+        raise HTTPException(status_code=408, detail="Command timeout")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.post("/commander/file")
+async def file_operation(request: FileOperation):
+    try:
+        file_path = WORKSPACE / request.path
+        
+        # Security: ensure path is within workspace
+        if not str(file_path.resolve()).startswith(str(WORKSPACE.resolve())):
+            raise HTTPException(status_code=403, detail="Path outside workspace")
+        
+        if request.operation == "read":
+            if not file_path.exists():
+                raise HTTPException(status_code=404, detail="File not found")
+            content = file_path.read_text()
+            return {"content": content}
+        
+        elif request.operation == "write":
+            file_path.parent.mkdir(parents=True, exist_ok=True)
+            file_path.write_text(request.content or "")
+            return {"success": True}
+        
+        elif request.operation == "list":
+            if file_path.is_dir():
+                items = [str(p.relative_to(WORKSPACE)) for p in file_path.iterdir()]
+            else:
+                items = [str(p.relative_to(WORKSPACE)) for p in WORKSPACE.iterdir()]
+            return {"items": items}
+        
+        elif request.operation == "delete":
+            if file_path.exists():
+                if file_path.is_file():
+                    file_path.unlink()
+                else:
+                    import shutil
+                    shutil.rmtree(file_path)
+            return {"success": True}
+        
+        else:
+            raise HTTPException(status_code=400, detail="Invalid operation")
+            
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@api_router.get("/commander/logs")
+async def get_commander_logs():
+    logs = await db.commander_logs.find({}, {"_id": 0}).sort("timestamp", -1).limit(50).to_list(50)
+    return logs
+
+# Identity & Memory
+@api_router.get("/identity", response_model=IdentityState)
+async def get_identity():
+    identity = await db.identity.find_one({"id": "nexus_identity"}, {"_id": 0})
+    if not identity:
+        default_identity = IdentityState()
+        doc = default_identity.model_dump()
+        doc['updated_at'] = doc['updated_at'].isoformat()
+        await db.identity.insert_one(doc)
+        return default_identity
+    if isinstance(identity.get('updated_at'), str):
+        identity['updated_at'] = datetime.fromisoformat(identity['updated_at'])
+    return identity
+
+@api_router.put("/identity")
+async def update_identity(identity: IdentityState):
+    doc = identity.model_dump()
+    doc['updated_at'] = datetime.now(timezone.utc).isoformat()
+    await db.identity.update_one(
+        {"id": "nexus_identity"},
+        {"$set": doc},
+        upsert=True
+    )
+    return {"success": True}
+
 app.include_router(api_router)
 
 app.add_middleware(
@@ -77,7 +363,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
