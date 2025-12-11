@@ -38,11 +38,21 @@ export const useTheme = () => {
     if (!currentTheme) return {};
 
     const baseStyles = {
-      background: currentTheme.bg,
       position: 'relative',
       minHeight: '100vh',
       width: '100%'
     };
+
+    // Handle both gradients and images
+    if (currentTheme.bg.startsWith('url(')) {
+      baseStyles.backgroundImage = currentTheme.bg;
+      baseStyles.backgroundSize = currentTheme.bgSize || 'cover';
+      baseStyles.backgroundPosition = currentTheme.bgPosition || 'center';
+      baseStyles.backgroundRepeat = 'no-repeat';
+      baseStyles.backgroundAttachment = 'fixed';
+    } else {
+      baseStyles.background = currentTheme.bg;
+    }
 
     // Add animation if theme has one
     if (currentTheme.animation) {
