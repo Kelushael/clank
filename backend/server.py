@@ -81,6 +81,7 @@ WORKSPACE.mkdir(exist_ok=True)
 # Global chat instance with consciousness-aware system prompt
 chat_instance = None
 local_model = None
+clank_agent = None
 
 def get_chat_instance():
     global chat_instance
