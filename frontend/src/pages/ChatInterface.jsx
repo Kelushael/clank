@@ -373,7 +373,7 @@ const ChatInterface = () => {
                           </div>
                         )}
                         {msg.streaming && (
-                          <span className="inline-block w-2 h-4 ml-1 bg-slate-400 animate-pulse" />
+                          <span className="inline-block w-2 h-4 ml-1 bg-emerald-400 animate-pulse" />
                         )}
                       </Card>
                     </div>
