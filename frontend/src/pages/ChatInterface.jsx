@@ -457,6 +457,29 @@ const ChatInterface = () => {
             </div>
           </TabsContent>
 
+          <TabsContent value="files" className="flex-1 flex flex-col m-0">
+            <div className="flex-1 overflow-auto p-6">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-xl font-bold text-zinc-100 mb-2" style={getTextGlowStyles()}>File Analysis</h2>
+                <p className="text-zinc-400 mb-6" style={getTextGlowStyles()}>
+                  Upload files for analysis. Images, documents, code - just drop them and ask questions.
+                </p>
+                
+                <FileUploader onFileAnalysis={handleFileAnalysis} />
+                
+                <div className="mt-8 p-4 rounded-lg bg-black/30 border border-zinc-800/50 backdrop-blur">
+                  <h3 className="text-sm font-medium text-zinc-300 mb-2">Pro Tips:</h3>
+                  <ul className="text-xs text-zinc-500 space-y-1">
+                    <li>• After uploading, just ask "What's in this image?" or "Summarize this document"</li>
+                    <li>• Clank automatically understands file context and routes to analysis</li>
+                    <li>• Screenshots, diagrams, code files, PDFs - all supported</li>
+                    <li>• No need to specify file names - just speak naturally</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
           <TabsContent value="commander" className="flex-1 flex flex-col m-0">
             <div className="flex-1 overflow-auto p-6">
               <div className="max-w-4xl mx-auto">
