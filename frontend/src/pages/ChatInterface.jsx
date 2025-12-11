@@ -30,6 +30,15 @@ const ChatInterface = () => {
   const messagesEndRef = useRef(null);
   const wsRef = useRef(null);
 
+  const { 
+    currentTheme, 
+    isLoaded, 
+    changeTheme, 
+    getThemeStyles, 
+    getOverlayStyles, 
+    getTextGlowStyles 
+  } = useTheme();
+
   useEffect(() => {
     loadConversations();
   }, []);
