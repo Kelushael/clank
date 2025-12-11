@@ -386,6 +386,70 @@ async def update_identity(identity: IdentityState):
     )
     return {"success": True}
 
+# Clank Agent Brain Endpoint
+@api_router.post("/clank/process")
+async def process_with_clank(request: ClankRequest):
+    """Process message through Clank's unified brain"""
+    try:
+        clank = get_clank_agent()
+        
+        # Get conversation context
+        convo = await db.conversations.find_one({"id": request.conversation_id}, {"_id": 0})
+        context = []
+        if convo and 'messages' in convo:
+            context = convo['messages'][-10:]  # Last 10 messages
+        
+        # Process through Clank
+        response = await clank.process_message(
+            user_message=request.message,
+            conversation_id=request.conversation_id,
+            conversation_context=context,
+            user_preferences=request.user_preferences or {}
+        )
+        
+        return {
+            "success": True,
+            "response": response.content,
+            "intent": {
+                "type": response.intent.type if response.intent else None,
+                "confidence": response.intent.confidence if response.intent else None,
+                "risk_level": response.intent.risk_level if response.intent else None,
+                "reasoning": response.intent.reasoning if response.intent else None
+            } if response.intent else None,
+            "decision": {
+                "action": response.decision.action if response.decision else None,
+                "reason": response.decision.reason if response.decision else None,
+                "options": [
+                    {
+                        "id": opt.id,
+                        "label": opt.label,
+                        "description": opt.description,
+                        "risk_level": opt.risk_level
+                    } for opt in response.decision.options
+                ] if response.decision and response.decision.options else []
+            } if response.decision else None
+        }
+        
+    except Exception as e:
+        logging.error(f"Clank processing error: {e}")
+        return {
+            "success": False,
+            "error": str(e),
+            "fallback_response": "I encountered an issue processing that request. Could you try rephrasing it?"
+        }
+
+@api_router.get("/clank/capabilities")
+async def get_clank_capabilities():
+    """Get Clank's current capabilities"""
+    try:
+        clank = get_clank_agent()
+        return {
+            "capabilities": clank.get_capabilities(),
+            "identity": clank.identity
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
 app.include_router(api_router)
 
 app.add_middleware(
