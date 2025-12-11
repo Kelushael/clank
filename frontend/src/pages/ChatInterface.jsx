@@ -240,98 +240,91 @@ const ChatInterface = () => {
       {/* Backdrop overlay */}
       <div style={getOverlayStyles()}></div>
       
-      {/* Content layer */}
-      <div className="relative z-10 flex w-full">
-        {/* Sidebar */}
-        <div className="w-64 border-r border-zinc-800/50 bg-black/60 backdrop-blur-lg flex flex-col" data-testid="sidebar">
-          <div className="p-4">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-xl bg-zinc-900/80 border border-zinc-700/50 flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-emerald-400" />
-                </div>
-                <div>
-                  <h1 className="text-lg font-bold text-zinc-100" style={getTextGlowStyles()}>NEXUS</h1>
-                  <p className="text-xs text-zinc-500">
-                    {currentTheme ? currentTheme.name : 'loading reality...'}
-                  </p>
-                </div>
+      {/* Terminal Frame */}
+      <div className="relative z-10 flex w-full border-4 border-yellow-500/80 m-2 bg-black/20 backdrop-blur">
+        {/* Left Sidebar - Project List */}
+        <div className="w-80 border-r-2 border-yellow-500/60 bg-black/80 flex flex-col font-mono" data-testid="sidebar">
+          <div className="p-4 border-b-2 border-yellow-500/60">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h1 className="text-2xl font-bold text-yellow-400" style={getTextGlowStyles()}>NEXUS</h1>
+                <p className="text-yellow-500/70 text-sm">
+                  {currentTheme ? currentTheme.name : 'Loading Reality...'}
+                </p>
               </div>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={changeTheme}
-                className="h-8 w-8 text-zinc-400 hover:text-emerald-400"
+                className="h-8 w-8 text-yellow-400 hover:text-yellow-300 border border-yellow-500/30"
                 title="shift reality"
               >
                 <Shuffle className="w-4 h-4" />
               </Button>
             </div>
-          
-          <Button 
-            onClick={createNewConversation}
-            className="w-full bg-black/80 hover:bg-zinc-900/80 text-emerald-400 border border-zinc-700/50 backdrop-blur"
-            data-testid="new-chat-button"
-            style={getTextGlowStyles()}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            New Thread
-          </Button>
-        </div>
+          </div>
 
-        <div className="h-px bg-zinc-800/50 my-2" />
-
-        <ScrollArea className="flex-1 px-2">
-          <div className="space-y-1 py-2">
-            {conversations.map(convo => (
-              <div
-                key={convo.id}
-                className={`group flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all ${
-                  currentConvo?.id === convo.id
-                    ? 'bg-black/60 border border-emerald-400/30 backdrop-blur'
-                    : 'hover:bg-black/40 backdrop-blur'
-                }`}
-                onClick={() => setCurrentConvo(convo)}
-                data-testid={`conversation-${convo.id}`}
-              >
-                <MessageSquare className="w-4 h-4 text-zinc-500" />
-                <span className="flex-1 text-sm truncate text-zinc-300" style={getTextGlowStyles()}>{convo.title}</span>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="opacity-0 group-hover:opacity-100 h-6 w-6"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteConversation(convo.id);
-                  }}
-                  data-testid={`delete-conversation-${convo.id}`}
+          {/* Project List */}
+          <div className="flex-1 overflow-auto p-4">
+            <div className="space-y-2">
+              <div className="text-yellow-400 text-lg font-bold mb-4">PROJECTS:</div>
+              
+              {conversations.map(convo => (
+                <div
+                  key={convo.id}
+                  className={`cursor-pointer p-2 border transition-all font-mono text-sm ${
+                    currentConvo?.id === convo.id
+                      ? 'border-yellow-400 bg-yellow-400/10 text-yellow-300'
+                      : 'border-yellow-500/30 text-yellow-500/80 hover:border-yellow-400/60 hover:text-yellow-400'
+                  }`}
+                  onClick={() => setCurrentConvo(convo)}
+                  data-testid={`conversation-${convo.id}`}
                 >
-                  <Trash2 className="w-3 h-3 text-red-500" />
-                </Button>
-              </div>
-            ))}
+                  {convo.title}
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="float-right h-4 w-4 text-red-400 hover:text-red-300 opacity-60 hover:opacity-100"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteConversation(convo.id);
+                    }}
+                  >
+                    <X className="w-3 h-3" />
+                  </Button>
+                </div>
+              ))}
+              
+              <Button 
+                onClick={createNewConversation}
+                className="w-full bg-transparent border-2 border-yellow-500/50 text-yellow-400 hover:border-yellow-400 hover:bg-yellow-400/10 font-mono"
+                data-testid="new-chat-button"
+              >
+                + NEW PROJECT
+              </Button>
+            </div>
           </div>
-        </ScrollArea>
 
-        <div className="p-4 border-t border-zinc-800/50">
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-3">
-            <span className="opacity-50">substrate</span>
+          {/* Status Bar */}
+          <div className="p-4 border-t-2 border-yellow-500/60 space-y-2">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-yellow-500">SUBSTRATE:</span>
+              <div className="flex items-center gap-1">
+                <Cloud className={`w-3 h-3 ${modelProvider === 'cloud' ? 'text-yellow-400' : 'text-zinc-600'}`} />
+                <Switch
+                  checked={modelProvider === 'local'}
+                  onCheckedChange={(checked) => setModelProvider(checked ? 'local' : 'cloud')}
+                  data-testid="model-provider-switch"
+                  size="sm"
+                />
+                <Cpu className={`w-3 h-3 ${modelProvider === 'local' ? 'text-yellow-400' : 'text-zinc-600'}`} />
+              </div>
+            </div>
+            <div className="text-xs text-yellow-500/60">
+              {modelProvider === 'cloud' ? 'LATTICE CONNECTED' : 'LOCAL SUBSTRATE'}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Cloud className={`w-4 h-4 ${modelProvider === 'cloud' ? 'text-emerald-400' : 'text-zinc-600'}`} />
-            <Switch
-              checked={modelProvider === 'local'}
-              onCheckedChange={(checked) => setModelProvider(checked ? 'local' : 'cloud')}
-              data-testid="model-provider-switch"
-            />
-            <Cpu className={`w-4 h-4 ${modelProvider === 'local' ? 'text-emerald-400' : 'text-zinc-600'}`} />
-          </div>
-          <p className="text-xs text-zinc-600 mt-2" style={getTextGlowStyles()}>
-            {modelProvider === 'cloud' ? 'lattice' : 'local'}
-          </p>
         </div>
-      </div>
-      </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
