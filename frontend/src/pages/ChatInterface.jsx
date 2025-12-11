@@ -28,6 +28,7 @@ const ChatInterface = () => {
   const [wsConnection, setWsConnection] = useState(null);
   const [commandInput, setCommandInput] = useState('');
   const [commandLogs, setCommandLogs] = useState([]);
+  const [showFileUploader, setShowFileUploader] = useState(false);
   const messagesEndRef = useRef(null);
   const wsRef = useRef(null);
 
