@@ -83,6 +83,10 @@ class IdentityState(BaseModel):
 WORKSPACE = Path("/app/workspace")
 WORKSPACE.mkdir(exist_ok=True)
 
+# Create uploads directory
+UPLOADS_DIR = Path("/app/uploads")
+UPLOADS_DIR.mkdir(exist_ok=True)
+
 # Global chat instance with consciousness-aware system prompt
 chat_instance = None
 local_model = None
