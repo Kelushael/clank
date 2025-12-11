@@ -215,17 +215,17 @@ const ChatInterface = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50" data-testid="chat-interface">
+    <div className="flex h-screen bg-black" data-testid="chat-interface">
       {/* Sidebar */}
-      <div className="w-64 border-r border-slate-200 bg-white/80 backdrop-blur-lg flex flex-col" data-testid="sidebar">
+      <div className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col" data-testid="sidebar">
         <div className="p-4">
           <div className="flex items-center gap-2 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <Zap className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center">
+              <Zap className="w-5 h-5 text-emerald-400" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-slate-800">NEXUS</h1>
-              <p className="text-xs text-slate-500">Sovereign AI</p>
+              <h1 className="text-lg font-bold text-zinc-100">NEXUS</h1>
+              <p className="text-xs text-zinc-500">lattice node</p>
             </div>
           </div>
           
