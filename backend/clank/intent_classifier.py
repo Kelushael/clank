@@ -14,7 +14,13 @@ class IntentClassifier:
     async def classify(self, user_message: str, conversation_context: List[Dict[str, str]] = None) -> ParsedIntent:
         """Convert natural language to structured intent"""
         
-        system_prompt = self._build_classification_prompt()
+        # Create a fresh LLM instance for classification with proper system prompt
+        classification_llm = LlmChat(
+            api_key=self.llm.api_key,
+            session_id=f"classification-{hash(user_message) % 10000}",
+            system_message=self._build_classification_prompt()
+        ).with_model("openai", "gpt-4o-mini")
+        
         context = self._build_context_string(conversation_context or [])
         
         classification_request = f"""
@@ -28,9 +34,8 @@ Analyze this message and return ONLY a JSON object with the classification.
 """
         
         try:
-            # Get classification from LLM
-            self.llm.system_message = system_prompt
-            response = await self.llm.send_message(UserMessage(text=classification_request))
+            # Get classification from dedicated LLM
+            response = await classification_llm.send_message(UserMessage(text=classification_request))
             
             # Parse JSON response
             classification_data = json.loads(response)
@@ -43,6 +48,7 @@ Analyze this message and return ONLY a JSON object with the classification.
             
         except json.JSONDecodeError as e:
             self.logger.error(f"Failed to parse LLM classification response: {e}")
+            self.logger.error(f"Raw response: {response}")
             # Fallback to safe default
             return self._fallback_intent(user_message)
         except Exception as e:
