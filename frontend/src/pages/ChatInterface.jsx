@@ -239,7 +239,7 @@ const ChatInterface = () => {
           </Button>
         </div>
 
-        <Separator />
+        <div className="h-px bg-zinc-800 my-2" />
 
         <ScrollArea className="flex-1 px-2">
           <div className="space-y-1 py-2">
@@ -248,14 +248,14 @@ const ChatInterface = () => {
                 key={convo.id}
                 className={`group flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all ${
                   currentConvo?.id === convo.id
-                    ? 'bg-gradient-to-r from-blue-100 to-indigo-100 shadow-sm'
-                    : 'hover:bg-slate-100'
+                    ? 'bg-zinc-900 border border-emerald-400/20'
+                    : 'hover:bg-zinc-900/50'
                 }`}
                 onClick={() => setCurrentConvo(convo)}
                 data-testid={`conversation-${convo.id}`}
               >
-                <MessageSquare className="w-4 h-4 text-slate-600" />
-                <span className="flex-1 text-sm truncate text-slate-700">{convo.title}</span>
+                <MessageSquare className="w-4 h-4 text-zinc-500" />
+                <span className="flex-1 text-sm truncate text-zinc-300">{convo.title}</span>
                 <Button
                   variant="ghost"
                   size="icon"
