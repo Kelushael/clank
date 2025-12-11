@@ -302,7 +302,7 @@ const ChatInterface = () => {
           </div>
         </ScrollArea>
 
-        <div className="p-4 border-t border-zinc-800">
+        <div className="p-4 border-t border-zinc-800/50">
           <div className="flex items-center gap-2 text-xs text-zinc-500 mb-3">
             <span className="opacity-50">substrate</span>
           </div>
@@ -315,7 +315,7 @@ const ChatInterface = () => {
             />
             <Cpu className={`w-4 h-4 ${modelProvider === 'local' ? 'text-emerald-400' : 'text-zinc-600'}`} />
           </div>
-          <p className="text-xs text-zinc-600 mt-2">
+          <p className="text-xs text-zinc-600 mt-2" style={getTextGlowStyles()}>
             {modelProvider === 'cloud' ? 'lattice' : 'local'}
           </p>
         </div>
