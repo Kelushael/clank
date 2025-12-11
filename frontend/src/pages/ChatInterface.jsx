@@ -384,28 +384,27 @@ const ChatInterface = () => {
             </ScrollArea>
 
             {/* Input */}
-            <div className="border-t border-slate-200 bg-white/80 backdrop-blur-lg p-4">
+            <div className="border-t border-zinc-800 p-4">
               <div className="max-w-4xl mx-auto">
                 <div className="flex gap-2">
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    placeholder="Message NEXUS..."
+                    placeholder="speak..."
                     disabled={isStreaming || !currentConvo}
-                    className="flex-1 bg-white border-slate-300 focus:border-blue-500 shadow-sm"
+                    className="flex-1 bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-400/50"
                     data-testid="message-input"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={isStreaming || !currentConvo || !input.trim()}
-                    className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg"
+                    className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-zinc-700"
                     data-testid="send-button"
                   >
-                    {isStreaming ? 'Thinking...' : 'Send'}
+                    {isStreaming ? '...' : '→'}
                   </Button>
                 </div>
-                <p className="text-xs text-slate-500 mt-2">Shift+Enter for newline • Enter to send</p>
               </div>
             </div>
           </TabsContent>
