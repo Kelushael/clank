@@ -323,15 +323,15 @@ const ChatInterface = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col bg-black">
+      <div className="flex-1 flex flex-col">
         <Tabs defaultValue="chat" className="flex-1 flex flex-col">
-          <div className="border-b border-zinc-800 px-6 py-3">
-            <TabsList className="bg-zinc-900" data-testid="tabs-list">
-              <TabsTrigger value="chat" className="data-[state=active]:bg-black data-[state=active]:text-emerald-400" data-testid="chat-tab">
+          <div className="border-b border-zinc-800/30 px-6 py-3 bg-black/40 backdrop-blur">
+            <TabsList className="bg-black/80 backdrop-blur" data-testid="tabs-list">
+              <TabsTrigger value="chat" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="chat-tab">
                 <MessageSquare className="w-4 h-4 mr-2" />
                 dialogue
               </TabsTrigger>
-              <TabsTrigger value="commander" className="data-[state=active]:bg-black data-[state=active]:text-emerald-400" data-testid="commander-tab">
+              <TabsTrigger value="commander" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="commander-tab">
                 <Terminal className="w-4 h-4 mr-2" />
                 execute
               </TabsTrigger>
