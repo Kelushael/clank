@@ -49,6 +49,11 @@ class ConversationCreate(BaseModel):
 
 class MessageCreate(BaseModel):
     content: str
+
+class ClankRequest(BaseModel):
+    message: str
+    conversation_id: str
+    user_preferences: Optional[Dict[str, Any]] = None
     
 class CommandRequest(BaseModel):
     command: str
