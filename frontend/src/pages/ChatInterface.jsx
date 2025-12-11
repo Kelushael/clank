@@ -349,62 +349,67 @@ const ChatInterface = () => {
                   </div>
                 </div>
               </div>
-              ) : (
-                <div className="space-y-6" data-testid="messages-container">
-                  {messages.map((msg, idx) => (
+            ) : (
+              <div className="space-y-6" data-testid="messages-container">
+                {messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${
+                      msg.role === 'user' ? 'justify-end' : 'justify-start'
+                    }`}
+                    data-testid={`message-${idx}`}
+                  >
                     <div
-                      key={idx}
-                      className={`flex ${
-                        msg.role === 'user' ? 'justify-end' : 'justify-start'
+                      className={`max-w-3xl p-4 border-2 font-mono ${
+                        msg.role === 'user'
+                          ? 'bg-yellow-400/10 border-yellow-400/60 text-yellow-200'
+                          : 'bg-black/70 border-yellow-500/40 text-yellow-300'
                       }`}
-                      data-testid={`message-${idx}`}
+                      style={getTextGlowStyles(msg.role === 'assistant')}
                     >
-                      <Card
-                        className={`max-w-3xl p-4 ${
-                          msg.role === 'user'
-                            ? 'bg-black/70 border-emerald-400/40 text-zinc-100 backdrop-blur'
-                            : 'bg-black/60 border-zinc-800/40 text-zinc-200 backdrop-blur'
-                        }`}
-                        style={getTextGlowStyles(msg.role === 'assistant')}
-                      >
-                        {msg.role === 'user' ? (
-                          <p className="whitespace-pre-wrap">{msg.content}</p>
-                        ) : (
-                          <div className="prose prose-sm max-w-none">
-                            <ReactMarkdown
-                              components={{
-                                code({ node, inline, className, children, ...props }) {
-                                  const match = /language-(\w+)/.exec(className || '');
-                                  return !inline && match ? (
-                                    <SyntaxHighlighter
-                                      style={vscDarkPlus}
-                                      language={match[1]}
-                                      PreTag="div"
-                                      {...props}
-                                    >
-                                      {String(children).replace(/\n$/, '')}
-                                    </SyntaxHighlighter>
-                                  ) : (
-                                    <code className="bg-slate-100 px-1 py-0.5 rounded text-sm" {...props}>
-                                      {children}
-                                    </code>
-                                  );
-                                }
-                              }}
-                            >
-                              {msg.content}
-                            </ReactMarkdown>
-                          </div>
-                        )}
-                        {msg.streaming && (
-                          <span className="inline-block w-2 h-4 ml-1 bg-emerald-400 animate-pulse" />
-                        )}
-                      </Card>
+                      {msg.role === 'user' ? (
+                        <div>
+                          <div className="text-yellow-500 text-xs mb-1">USER INPUT:</div>
+                          <pre className="whitespace-pre-wrap font-mono">{msg.content}</pre>
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="text-yellow-500 text-xs mb-1">NEXUS OUTPUT:</div>
+                          <ReactMarkdown
+                            className="prose prose-sm max-w-none text-yellow-300 font-mono"
+                            components={{
+                              code({ node, inline, className, children, ...props }) {
+                                const match = /language-(\w+)/.exec(className || '');
+                                return !inline && match ? (
+                                  <SyntaxHighlighter
+                                    style={vscDarkPlus}
+                                    language={match[1]}
+                                    PreTag="div"
+                                    {...props}
+                                  >
+                                    {String(children).replace(/\n$/, '')}
+                                  </SyntaxHighlighter>
+                                ) : (
+                                  <code className="bg-yellow-400/20 px-1 py-0.5 border border-yellow-500/30 text-sm font-mono" {...props}>
+                                    {children}
+                                  </code>
+                                );
+                              }
+                            }}
+                          >
+                            {msg.content}
+                          </ReactMarkdown>
+                        </div>
+                      )}
+                      {msg.streaming && (
+                        <span className="inline-block w-2 h-4 ml-1 bg-yellow-400 animate-pulse" />
+                      )}
                     </div>
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              )}
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
             </ScrollArea>
 
             {/* Input */}
