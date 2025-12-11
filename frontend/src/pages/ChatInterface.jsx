@@ -328,26 +328,9 @@ const ChatInterface = () => {
 
         {/* Main Content Area - Chat Over Painted Landscape */}
         <div className="flex-1 flex flex-col relative">
-          <div className="border-b border-zinc-800/30 px-6 py-3 bg-black/40 backdrop-blur">
-            <TabsList className="bg-black/80 backdrop-blur" data-testid="tabs-list">
-              <TabsTrigger value="chat" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="chat-tab">
-                <MessageSquare className="w-4 h-4 mr-2" />
-                dialogue
-              </TabsTrigger>
-              <TabsTrigger value="files" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="files-tab">
-                <Paperclip className="w-4 h-4 mr-2" />
-                files
-              </TabsTrigger>
-              <TabsTrigger value="commander" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="commander-tab">
-                <Terminal className="w-4 h-4 mr-2" />
-                execute
-              </TabsTrigger>
-            </TabsList>
-          </div>
-
-          <TabsContent value="chat" className="flex-1 flex flex-col m-0">
-            {/* Messages */}
-            <ScrollArea className="flex-1 px-6 py-4">
+          
+          {/* Chat Messages Area */}
+          <div className="flex-1 overflow-auto p-6" data-testid="messages-area">
               {messages.length === 0 ? (
                 <div className="h-full flex items-center justify-center" data-testid="empty-chat-state">
                   <div className="text-center max-w-2xl">
