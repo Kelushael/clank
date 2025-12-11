@@ -231,11 +231,11 @@ const ChatInterface = () => {
           
           <Button 
             onClick={createNewConversation}
-            className="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white shadow-lg"
+            className="w-full bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-zinc-700"
             data-testid="new-chat-button"
           >
             <Plus className="w-4 h-4 mr-2" />
-            New Chat
+            New Thread
           </Button>
         </div>
 
