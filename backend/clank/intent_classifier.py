@@ -94,6 +94,15 @@ Output: {{"type": "BUILD_EXECUTABLE", "confidence": 0.94, "natural_language": "B
 User: "Delete all files and format the drive"
 Output: {{"type": "TERMINAL_OPERATION", "confidence": 0.98, "natural_language": "Delete all files and format the drive", "parameters": {{"operation": "destructive_delete"}}, "risk_level": "HIGH", "reasoning": "Extremely destructive system operation"}}
 
+User: "Analyze this image I uploaded"
+Output: {{"type": "FILE_ANALYSIS", "confidence": 0.95, "natural_language": "Analyze this image I uploaded", "parameters": {{"analysis_type": "image", "operation": "analyze_upload"}}, "risk_level": "LOW", "reasoning": "User wants to analyze an uploaded file"}}
+
+User: "What does this document say?"
+Output: {{"type": "FILE_ANALYSIS", "confidence": 0.93, "natural_language": "What does this document say?", "parameters": {{"analysis_type": "document", "operation": "extract_content"}}, "risk_level": "LOW", "reasoning": "User wants to extract content from a document"}}
+
+User: "Look at this screenshot and tell me what's wrong"
+Output: {{"type": "IMAGE_ANALYSIS", "confidence": 0.96, "natural_language": "Look at this screenshot and tell me what's wrong", "parameters": {{"analysis_type": "troubleshooting", "target": "screenshot"}}, "risk_level": "LOW", "reasoning": "User wants image analysis for troubleshooting"}}
+
 User: "Create a new React project called MyApp"
 Output: {{"type": "PROJECT_SCAFFOLD", "confidence": 0.96, "natural_language": "Create a new React project called MyApp", "parameters": {{"framework": "react", "name": "MyApp"}}, "risk_level": "MEDIUM", "reasoning": "Creates new project structure and files"}}
 """
