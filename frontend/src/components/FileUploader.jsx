@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { Button } from '../ui/button';
-import { Card } from '../ui/card';
+import { Button } from './ui/button';
+import { Card } from './ui/card';
 import { Upload, File, Image, FileText, Code, X } from 'lucide-react';
 import { toast } from 'sonner';
 
