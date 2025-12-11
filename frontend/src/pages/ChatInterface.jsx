@@ -259,15 +259,16 @@ const ChatInterface = () => {
           
           <Button 
             onClick={createNewConversation}
-            className="w-full bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-zinc-700"
+            className="w-full bg-black/80 hover:bg-zinc-900/80 text-emerald-400 border border-zinc-700/50 backdrop-blur"
             data-testid="new-chat-button"
+            style={getTextGlowStyles()}
           >
             <Plus className="w-4 h-4 mr-2" />
             New Thread
           </Button>
         </div>
 
-        <div className="h-px bg-zinc-800 my-2" />
+        <div className="h-px bg-zinc-800/50 my-2" />
 
         <ScrollArea className="flex-1 px-2">
           <div className="space-y-1 py-2">
@@ -276,14 +277,14 @@ const ChatInterface = () => {
                 key={convo.id}
                 className={`group flex items-center gap-2 p-3 rounded-lg cursor-pointer transition-all ${
                   currentConvo?.id === convo.id
-                    ? 'bg-zinc-900 border border-emerald-400/20'
-                    : 'hover:bg-zinc-900/50'
+                    ? 'bg-black/60 border border-emerald-400/30 backdrop-blur'
+                    : 'hover:bg-black/40 backdrop-blur'
                 }`}
                 onClick={() => setCurrentConvo(convo)}
                 data-testid={`conversation-${convo.id}`}
               >
                 <MessageSquare className="w-4 h-4 text-zinc-500" />
-                <span className="flex-1 text-sm truncate text-zinc-300">{convo.title}</span>
+                <span className="flex-1 text-sm truncate text-zinc-300" style={getTextGlowStyles()}>{convo.title}</span>
                 <Button
                   variant="ghost"
                   size="icon"
