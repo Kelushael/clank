@@ -9,6 +9,66 @@ export const backdrops = {
     vibe: 'mountains melt into magenta, purple-blue sky bleeding over ochre ridges—like you stepped off I-40 between Albuquerque and nowhere'
   },
 
+  bobRossMountains: {
+    name: 'Happy Little Mountains',
+    bg: 'url("https://images.unsplash.com/photo-1678901764789-ecdff8d4db1e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwxfHxCb2IlMjBSb3NzJTIwcGFpbnRpbmclMjBoYXBweSUyMGxpdHRsZSUyMHRyZWVzJTIwbW91bnRhaW5zJTIwbGFuZHNjYXBlJTIwb2lsJTIwcGFpbnRpbmd8ZW58MHx8fHwxNzY1NDczMzA2fDA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.4)',
+    textGlow: 'rgba(255, 255, 255, 0.7)',
+    vibe: 'golden autumn mountains with pine trees and lakeside bathed in sunlight—where mankind truly belongs in harmony with nature'
+  },
+
+  whiteKnightsForest: {
+    name: 'The White Knights',
+    bg: 'url("https://images.unsplash.com/photo-1701189701778-7bb8d81549d8?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzR8MHwxfHNlYXJjaHwyfHxCb2IlMjBSb3NzJTIwcGFpbnRpbmclMjBoYXBweSUyMGxpdHRsZSUyMHRyZWVzJTIwbW91bnRhaW5zJTIwbGFuZHNjYXBlJTIwb2lsJTIwcGFpbnRpbmd8ZW58MHx8fHwxNzY1NDczMzA2fDA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.35)',
+    textGlow: 'rgba(255, 215, 0, 0.6)',
+    vibe: 'white-barked trees standing like protectors on the edge of wilderness—autumn magic with the unending beauty of seasonal change'
+  },
+
+  mistyLakescape: {
+    name: 'Koli Dreams',
+    bg: 'url("https://images.unsplash.com/photo-1744571180458-ac007522e474?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHx3YXRlcmNvbG9yJTIwcGFpbnRpbmclMjBtaXN0eSUyMG1vdW50YWlucyUyMGZvcmVzdCUyMGxha2UlMjBsYW5kc2NhcGUlMjBzZXJlbmV8ZW58MHx8fHwxNzY1NDczMzEyfDA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.3)',
+    textGlow: 'rgba(173, 216, 230, 0.8)',
+    vibe: 'nordic serenity by Eero Järnefelt—misty lakes and distant mountains where thoughts flow like watercolors'
+  },
+
+  vibrantLandscape: {
+    name: 'Pink Sky Territory',
+    bg: 'url("https://images.unsplash.com/photo-1755344533376-0e550441e546?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHw0fHx3YXRlcmNvbG9yJTIwcGFpbnRpbmclMjBtaXN0eSUyMG1vdW50YWlucyUyMGZvcmVzdCUyMGxha2UlMjBsYW5kc2NhcGUlMjBzZXJlbmV8ZW58MHx8fHwxNzY1NDczMzEyfDA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.25)',
+    textGlow: 'rgba(255, 192, 203, 0.7)',
+    vibe: 'vibrant landscape with pink clouds and electric blue sky—reality painted in impossible colors'
+  },
+
+  abstractWaterfall: {
+    name: 'Consciousness Flow',
+    bg: 'url("https://images.unsplash.com/photo-1667980898743-fcfe470b7d2a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGFydCUyMHBhaW50aW5nJTIwY29udGVtcG9yYXJ5JTIwbW9kZXJuJTIwY2FudmFzJTIwdGV4dHVyZXxlbnwwfHx8fDE3NjU0NzMzMjF8MA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.4)',
+    textGlow: 'rgba(135, 206, 235, 0.8)',
+    vibe: 'abstract waterfall of consciousness—blue and white paint flowing like thought itself becoming visible'
+  },
+
+  colorExplosion: {
+    name: 'Synaptic Fire',
+    bg: 'url("https://images.unsplash.com/photo-1667980930112-4d1157f62892?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwyfHxhYnN0cmFjdCUyMGFydCUyMHBhaW50aW5nJTIwY29udGVtcG9yYXJ5JTIwbW9kZXJuJTIwY2FudmFzJTIwdGV4dHVyZXxlbnwwfHx8fDE3NjU0NzMzMjF8MA&ixlib=rb-4.1.0&q=85")',
+    bgSize: 'cover',
+    bgPosition: 'center',
+    overlay: 'rgba(0, 0, 0, 0.35)',
+    textGlow: 'rgba(255, 165, 0, 0.8)',
+    vibe: 'neural networks firing—green, blue, orange paint exploding across canvas like thoughts connecting in real-time'
+  },
+
   flickeringStation: {
     name: 'Interrogation Lamp',
     bg: 'linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0f0f0f 100%)',
