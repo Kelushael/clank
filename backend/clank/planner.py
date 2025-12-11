@@ -31,6 +31,9 @@ class ClankPlanner:
         elif intent.type == IntentType.FILE_OPERATION:
             return self._handle_file_operation_intent(intent, user_prefs)
         
+        elif intent.type == IntentType.FILE_ANALYSIS or intent.type == IntentType.IMAGE_ANALYSIS:
+            return self._handle_file_analysis_intent(intent, user_prefs)
+        
         elif intent.type == IntentType.TERMINAL_OPERATION:
             return self._handle_terminal_operation_intent(intent, user_prefs)
         
