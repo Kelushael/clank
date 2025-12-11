@@ -236,6 +236,37 @@ class ClankPlanner:
             reason="Meta question about the system"
         )
     
+    def _handle_file_analysis_intent(self, intent: ParsedIntent, user_prefs: Dict[str, Any]) -> PlannerDecision:
+        """Handle file and image analysis requests"""
+        analysis_type = intent.parameters.get('analysis_type', 'general')
+        
+        # File analysis is generally safe (read-only)
+        if intent.risk_level == RiskLevel.LOW:
+            return PlannerDecision(
+                action="EXECUTE_PLAN", 
+                reason="Safe file analysis request",
+                plan_steps=[intent]
+            )
+        else:
+            return PlannerDecision(
+                action="ASK_CONFIRMATION",
+                reason="File analysis with potential security implications",
+                options=[
+                    ConfirmationOption(
+                        id="ANALYZE_SAFE",
+                        label="Analyze the file safely",
+                        description="I'll analyze the file content without executing any code",
+                        risk_level=RiskLevel.LOW
+                    ),
+                    ConfirmationOption(
+                        id="SHOW_FILE_INFO_ONLY",
+                        label="Just show me file information",
+                        description="Display file metadata without analyzing content",
+                        risk_level=RiskLevel.LOW
+                    )
+                ]
+            )
+    
     def _generate_clarification_question(self, intent: ParsedIntent) -> str:
         """Generate a clarification question for low-confidence intents"""
         if intent.confidence < 0.3:
