@@ -410,7 +410,6 @@ const ChatInterface = () => {
                 <div ref={messagesEndRef} />
               </div>
             )}
-            </ScrollArea>
 
             {/* Input */}
             <div className="border-t border-zinc-800/30 p-4 bg-black/40 backdrop-blur">
