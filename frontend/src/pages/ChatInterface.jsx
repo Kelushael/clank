@@ -7,11 +7,12 @@ import { Separator } from '../components/ui/separator';
 import { Card } from '../components/ui/card';
 import { Switch } from '../components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { MessageSquare, Plus, Trash2, Terminal, Settings, Zap, Cloud, Cpu } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Terminal, Settings, Zap, Cloud, Cpu, Shuffle } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import { toast } from 'sonner';
+import { useTheme } from '../hooks/useTheme';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
