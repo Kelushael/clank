@@ -273,21 +273,21 @@ const ChatInterface = () => {
           </div>
         </ScrollArea>
 
-        <div className="p-4 border-t border-slate-200">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-slate-600">Model Provider</span>
+        <div className="p-4 border-t border-zinc-800">
+          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-3">
+            <span className="opacity-50">substrate</span>
           </div>
           <div className="flex items-center gap-2">
-            <Cloud className={`w-4 h-4 ${modelProvider === 'cloud' ? 'text-blue-500' : 'text-slate-400'}`} />
+            <Cloud className={`w-4 h-4 ${modelProvider === 'cloud' ? 'text-emerald-400' : 'text-zinc-600'}`} />
             <Switch
               checked={modelProvider === 'local'}
               onCheckedChange={(checked) => setModelProvider(checked ? 'local' : 'cloud')}
               data-testid="model-provider-switch"
             />
-            <Cpu className={`w-4 h-4 ${modelProvider === 'local' ? 'text-indigo-500' : 'text-slate-400'}`} />
+            <Cpu className={`w-4 h-4 ${modelProvider === 'local' ? 'text-emerald-400' : 'text-zinc-600'}`} />
           </div>
-          <p className="text-xs text-slate-500 mt-2">
-            {modelProvider === 'cloud' ? 'Cloud (Groq/Fast)' : 'Local (Bundled)'}
+          <p className="text-xs text-zinc-600 mt-2">
+            {modelProvider === 'cloud' ? 'lattice' : 'local'}
           </p>
         </div>
       </div>
