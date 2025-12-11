@@ -342,6 +342,10 @@ const ChatInterface = () => {
                 <MessageSquare className="w-4 h-4 mr-2" />
                 dialogue
               </TabsTrigger>
+              <TabsTrigger value="files" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="files-tab">
+                <Paperclip className="w-4 h-4 mr-2" />
+                files
+              </TabsTrigger>
               <TabsTrigger value="commander" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="commander-tab">
                 <Terminal className="w-4 h-4 mr-2" />
                 execute
