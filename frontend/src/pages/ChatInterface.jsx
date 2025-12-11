@@ -369,9 +369,10 @@ const ChatInterface = () => {
                       <Card
                         className={`max-w-3xl p-4 ${
                           msg.role === 'user'
-                            ? 'bg-zinc-950 border-emerald-400/30 text-zinc-100'
-                            : 'bg-zinc-950 border-zinc-800 text-zinc-200'
+                            ? 'bg-black/70 border-emerald-400/40 text-zinc-100 backdrop-blur'
+                            : 'bg-black/60 border-zinc-800/40 text-zinc-200 backdrop-blur'
                         }`}
+                        style={getTextGlowStyles(msg.role === 'assistant')}
                       >
                         {msg.role === 'user' ? (
                           <p className="whitespace-pre-wrap">{msg.content}</p>
