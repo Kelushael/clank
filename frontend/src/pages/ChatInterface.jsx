@@ -470,7 +470,7 @@ const ChatInterface = () => {
                 <div className="mt-8 p-4 rounded-lg bg-black/30 border border-zinc-800/50 backdrop-blur">
                   <h3 className="text-sm font-medium text-zinc-300 mb-2">Pro Tips:</h3>
                   <ul className="text-xs text-zinc-500 space-y-1">
-                    <li>• After uploading, just ask "What's in this image?" or "Summarize this document"</li>
+                    <li>• After uploading, just ask &quot;What&apos;s in this image?&quot; or &quot;Summarize this document&quot;</li>
                     <li>• Clank automatically understands file context and routes to analysis</li>
                     <li>• Screenshots, diagrams, code files, PDFs - all supported</li>
                     <li>• No need to specify file names - just speak naturally</li>
