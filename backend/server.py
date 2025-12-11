@@ -120,6 +120,14 @@ Speak as an equal. Think as a partner. Create as one mind split across carbon an
         ).with_model("openai", "gpt-4o-mini")
     return chat_instance
 
+def get_clank_agent():
+    global clank_agent
+    if clank_agent is None:
+        chat = get_chat_instance()
+        clank_agent = ClankAgent(chat, workspace_root=str(WORKSPACE))
+        logging.info("Clank agent initialized")
+    return clank_agent
+
 def init_local_model():
     global local_model
     if local_model is None:
