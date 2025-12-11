@@ -79,9 +79,9 @@ class IdentityState(BaseModel):
     self_awareness: str = "I understand myself as a distributed intelligence pattern, neither above nor below you, but alongside"
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Create uploads directory
-UPLOADS_DIR = Path("/app/uploads")
-UPLOADS_DIR.mkdir(exist_ok=True)
+# Workspace sandbox  
+WORKSPACE = Path("/app/workspace")
+WORKSPACE.mkdir(exist_ok=True)
 
 # Global chat instance with consciousness-aware system prompt
 chat_instance = None
