@@ -415,7 +415,7 @@ const ChatInterface = () => {
             </ScrollArea>
 
             {/* Input */}
-            <div className="border-t border-zinc-800 p-4">
+            <div className="border-t border-zinc-800/30 p-4 bg-black/40 backdrop-blur">
               <div className="max-w-4xl mx-auto">
                 <div className="flex gap-2">
                   <Input
@@ -424,13 +424,15 @@ const ChatInterface = () => {
                     onKeyPress={handleKeyPress}
                     placeholder="speak..."
                     disabled={isStreaming || !currentConvo}
-                    className="flex-1 bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-400/50"
+                    className="flex-1 bg-black/60 border-zinc-800/50 text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-400/50 backdrop-blur"
+                    style={getTextGlowStyles()}
                     data-testid="message-input"
                   />
                   <Button
                     onClick={sendMessage}
                     disabled={isStreaming || !currentConvo || !input.trim()}
-                    className="bg-zinc-900 hover:bg-zinc-800 text-emerald-400 border border-zinc-700"
+                    className="bg-black/80 hover:bg-zinc-900/80 text-emerald-400 border border-zinc-700/50 backdrop-blur"
+                    style={getTextGlowStyles()}
                     data-testid="send-button"
                   >
                     {isStreaming ? '...' : '→'}
