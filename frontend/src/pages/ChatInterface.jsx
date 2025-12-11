@@ -326,9 +326,8 @@ const ChatInterface = () => {
           </div>
         </div>
 
-        {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <Tabs defaultValue="chat" className="flex-1 flex flex-col">
+        {/* Main Content Area - Chat Over Painted Landscape */}
+        <div className="flex-1 flex flex-col relative">
           <div className="border-b border-zinc-800/30 px-6 py-3 bg-black/40 backdrop-blur">
             <TabsList className="bg-black/80 backdrop-blur" data-testid="tabs-list">
               <TabsTrigger value="chat" className="data-[state=active]:bg-black/90 data-[state=active]:text-emerald-400" data-testid="chat-tab">
