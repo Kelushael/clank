@@ -320,6 +320,7 @@ const ChatInterface = () => {
           </p>
         </div>
       </div>
+      </div>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col bg-black">
