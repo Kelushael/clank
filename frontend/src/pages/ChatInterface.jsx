@@ -219,6 +219,15 @@ const ChatInterface = () => {
     }
   };
 
+  const handleFileAnalysis = (analysisText) => {
+    // Add analysis result as a message
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: analysisText,
+      timestamp: new Date()
+    }]);
+  };
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
