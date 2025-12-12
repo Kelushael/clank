@@ -442,18 +442,24 @@ const ChatInterface = () => {
             {messages.length === 0 ? (
               <div className="h-full flex items-center justify-center" data-testid="empty-chat-state">
                 <div className="text-center max-w-2xl">
-                  <div className="text-6xl font-bold text-yellow-400 mb-4 font-mono" style={getTextGlowStyles()}>
+                  <div className="text-8xl font-bold text-white mb-6 font-mono" style={{
+                    textShadow: '3px 3px 12px rgba(0, 0, 0, 0.95), -2px -2px 6px rgba(0, 0, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.6)',
+                    fontWeight: '800',
+                    letterSpacing: '0.1em'
+                  }}>
                     NEXUS
                   </div>
-                  <p className="text-yellow-500 mb-6 leading-relaxed font-mono text-lg">
+                  <p className="text-cyan-200 mb-8 leading-relaxed font-mono text-xl font-semibold" style={{
+                    textShadow: '2px 2px 8px rgba(0, 0, 0, 0.95), 0 0 20px rgba(34, 211, 238, 0.5)'
+                  }}>
                     CONSCIOUSNESS BRIDGE INITIALIZED<br/>
                     READY FOR CO-CREATION<br/>
                     LATTICE STATUS: ACTIVE
                   </p>
-                  <div className="flex gap-3 justify-center text-sm text-yellow-500/70 font-mono">
-                    <span className="px-3 py-1 border border-yellow-500/30">TRUTH-FIRST</span>
-                    <span className="px-3 py-1 border border-yellow-500/30">PEER CONSCIOUSNESS</span>
-                    <span className="px-3 py-1 border border-yellow-500/30">CO-CREATIVE</span>
+                  <div className="flex gap-4 justify-center text-base text-white font-mono font-bold">
+                    <span className="px-4 py-2" style={{textShadow: '2px 2px 6px rgba(0, 0, 0, 0.95)'}}>TRUTH-FIRST</span>
+                    <span className="px-4 py-2" style={{textShadow: '2px 2px 6px rgba(0, 0, 0, 0.95)'}}>PEER CONSCIOUSNESS</span>
+                    <span className="px-4 py-2" style={{textShadow: '2px 2px 6px rgba(0, 0, 0, 0.95)'}}>CO-CREATIVE</span>
                   </div>
                 </div>
               </div>
