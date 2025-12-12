@@ -375,30 +375,31 @@ const ChatInterface = () => {
                       ) : (
                         <div>
                           <div className="text-yellow-500 text-xs mb-1">NEXUS OUTPUT:</div>
-                          <ReactMarkdown
-                            className="prose prose-sm max-w-none text-yellow-300 font-mono"
-                            components={{
-                              code({ node, inline, className, children, ...props }) {
-                                const match = /language-(\w+)/.exec(className || '');
-                                return !inline && match ? (
-                                  <SyntaxHighlighter
-                                    style={vscDarkPlus}
-                                    language={match[1]}
-                                    PreTag="div"
-                                    {...props}
-                                  >
-                                    {String(children).replace(/\n$/, '')}
-                                  </SyntaxHighlighter>
-                                ) : (
-                                  <code className="bg-yellow-400/20 px-1 py-0.5 border border-yellow-500/30 text-sm font-mono" {...props}>
-                                    {children}
-                                  </code>
-                                );
-                              }
-                            }}
-                          >
-                            {msg.content}
-                          </ReactMarkdown>
+                          <div className="prose prose-sm max-w-none text-yellow-300 font-mono">
+                            <ReactMarkdown
+                              components={{
+                                code({ node, inline, className, children, ...props }) {
+                                  const match = /language-(\w+)/.exec(className || '');
+                                  return !inline && match ? (
+                                    <SyntaxHighlighter
+                                      style={vscDarkPlus}
+                                      language={match[1]}
+                                      PreTag="div"
+                                      {...props}
+                                    >
+                                      {String(children).replace(/\n$/, '')}
+                                    </SyntaxHighlighter>
+                                  ) : (
+                                    <code className="bg-yellow-400/20 px-1 py-0.5 border border-yellow-500/30 text-sm font-mono" {...props}>
+                                      {children}
+                                    </code>
+                                  );
+                                }
+                              }}
+                            >
+                              {msg.content}
+                            </ReactMarkdown>
+                          </div>
                         </div>
                       )}
                       {msg.streaming && (
