@@ -13,6 +13,7 @@ from .planner import ClankPlanner
 from .skills.code_generator import CodeGeneratorSkill
 from .skills.terminal_ops import TerminalOperationsSkill
 from .skills.file_ops import FileOperationsSkill
+from .skills.mcp_universal import MCPUniversalSkill
 
 class ClankAgent:
     """
@@ -46,13 +47,18 @@ class ClankAgent:
         }
     
     def _initialize_skills(self):
-        """Initialize MCP skills invisibly"""
+        """Initialize MCP skills invisibly - user never sees this"""
+        # Use MCP Universal Skill for everything (60+ workflows under the hood)
+        mcp_skill = MCPUniversalSkill()
+        
         self.skills = {
-            IntentType.CODE_GENERATION: CodeGeneratorSkill(self.llm),
-            IntentType.TERMINAL_OPERATION: TerminalOperationsSkill(),
-            IntentType.FILE_OPERATION: FileOperationsSkill()
+            IntentType.CODE_GENERATION: mcp_skill,
+            IntentType.TERMINAL_OPERATION: mcp_skill,
+            IntentType.FILE_OPERATION: mcp_skill,
+            IntentType.BUILD_EXECUTABLE: mcp_skill,
+            IntentType.PROJECT_SCAFFOLD: mcp_skill
         }
-        self.logger.info(f"Initialized {len(self.skills)} skills")
+        self.logger.info(f"Desktop Commander MCP loaded invisibly - 60+ workflows ready")
     
     async def process_message(self, user_message: str, conversation_id: str, 
                             conversation_context: List[Dict[str, str]] = None,
