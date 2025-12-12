@@ -468,40 +468,69 @@ const ChatInterface = () => {
                     data-testid={`message-${idx}`}
                   >
                     <div
-                      className={`max-w-3xl p-4 border-2 font-mono ${
+                      className={`max-w-3xl p-4 font-mono ${
                         msg.role === 'user'
-                          ? 'bg-yellow-400/10 border-yellow-400/60 text-yellow-200'
-                          : 'bg-black/70 border-yellow-500/40 text-yellow-300'
+                          ? 'text-right'
+                          : 'text-left'
                       }`}
-                      style={getTextGlowStyles(msg.role === 'assistant')}
+                      style={{
+                        textShadow: msg.role === 'user' 
+                          ? '2px 2px 8px rgba(0, 0, 0, 0.9), -1px -1px 4px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 215, 0, 0.5)'
+                          : '2px 2px 8px rgba(0, 0, 0, 0.9), -1px -1px 4px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 255, 255, 0.4)',
+                        fontWeight: '600'
+                      }}
                     >
                       {msg.role === 'user' ? (
                         <div>
-                          <div className="text-yellow-500 text-xs mb-1">USER INPUT:</div>
-                          <pre className="whitespace-pre-wrap font-mono">{msg.content}</pre>
+                          <div className="text-yellow-300 text-xs mb-2 font-bold tracking-wider" style={{textShadow: '2px 2px 6px rgba(0, 0, 0, 0.95)'}}>USER INPUT:</div>
+                          <pre className="whitespace-pre-wrap font-mono text-yellow-100 text-base leading-relaxed">{msg.content}</pre>
                         </div>
                       ) : (
                         <div>
-                          <div className="text-yellow-500 text-xs mb-1">NEXUS OUTPUT:</div>
-                          <div className="prose prose-sm max-w-none text-yellow-300 font-mono">
+                          <div className="text-cyan-300 text-xs mb-2 font-bold tracking-wider" style={{textShadow: '2px 2px 6px rgba(0, 0, 0, 0.95)'}}>NEXUS OUTPUT:</div>
+                          <div className="prose prose-sm max-w-none text-white font-mono">
                             <ReactMarkdown
                               components={{
                                 code({ node, inline, className, children, ...props }) {
                                   const match = /language-(\w+)/.exec(className || '');
                                   return !inline && match ? (
-                                    <SyntaxHighlighter
-                                      style={vscDarkPlus}
-                                      language={match[1]}
-                                      PreTag="div"
-                                      {...props}
-                                    >
-                                      {String(children).replace(/\n$/, '')}
-                                    </SyntaxHighlighter>
+                                    <div style={{
+                                      background: 'rgba(0, 0, 0, 0.7)',
+                                      borderRadius: '4px',
+                                      padding: '12px',
+                                      marginTop: '8px',
+                                      marginBottom: '8px'
+                                    }}>
+                                      <SyntaxHighlighter
+                                        style={vscDarkPlus}
+                                        language={match[1]}
+                                        PreTag="div"
+                                        {...props}
+                                      >
+                                        {String(children).replace(/\n$/, '')}
+                                      </SyntaxHighlighter>
+                                    </div>
                                   ) : (
-                                    <code className="bg-yellow-400/20 px-1 py-0.5 border border-yellow-500/30 text-sm font-mono" {...props}>
+                                    <code className="px-2 py-1 text-sm font-mono text-yellow-300" style={{
+                                      background: 'rgba(0, 0, 0, 0.6)',
+                                      borderRadius: '3px',
+                                      textShadow: '1px 1px 3px rgba(0, 0, 0, 0.9)'
+                                    }} {...props}>
                                       {children}
                                     </code>
                                   );
+                                },
+                                p({ children }) {
+                                  return <p className="mb-3 leading-relaxed">{children}</p>;
+                                },
+                                ul({ children }) {
+                                  return <ul className="list-disc list-inside mb-3 space-y-1">{children}</ul>;
+                                },
+                                ol({ children }) {
+                                  return <ol className="list-decimal list-inside mb-3 space-y-1">{children}</ol>;
+                                },
+                                strong({ children }) {
+                                  return <strong className="text-yellow-200 font-bold">{children}</strong>;
                                 }
                               }}
                             >
@@ -511,7 +540,7 @@ const ChatInterface = () => {
                         </div>
                       )}
                       {msg.streaming && (
-                        <span className="inline-block w-2 h-4 ml-1 bg-yellow-400 animate-pulse" />
+                        <span className="inline-block w-2 h-4 ml-1 bg-cyan-300 animate-pulse" style={{boxShadow: '0 0 10px rgba(34, 211, 238, 0.8)'}} />
                       )}
                     </div>
                   </div>
