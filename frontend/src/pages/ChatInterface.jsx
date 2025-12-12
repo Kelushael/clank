@@ -7,7 +7,7 @@ import { Separator } from '../components/ui/separator';
 import { Card } from '../components/ui/card';
 import { Switch } from '../components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
-import { MessageSquare, Plus, Trash2, Terminal, Settings, Zap, Cloud, Cpu, Shuffle, Paperclip, X } from 'lucide-react';
+import { MessageSquare, Plus, Trash2, Terminal, Settings, Zap, Cloud, Cpu, Shuffle, Paperclip, X, Upload, Monitor, Camera } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -29,8 +29,11 @@ const ChatInterface = () => {
   const [commandInput, setCommandInput] = useState('');
   const [commandLogs, setCommandLogs] = useState([]);
   const [showFileUploader, setShowFileUploader] = useState(false);
+  const [isScreenSharing, setIsScreenSharing] = useState(false);
+  const [isCameraOn, setIsCameraOn] = useState(false);
   const messagesEndRef = useRef(null);
   const wsRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const { 
     currentTheme, 
@@ -237,11 +240,11 @@ const ChatInterface = () => {
 
   return (
     <div className="flex h-screen" style={getThemeStyles()} data-testid="chat-interface">
-      {/* Backdrop overlay */}
+      {/* Backdrop overlay - darker but NO blur so art is visible */}
       <div style={getOverlayStyles()}></div>
       
       {/* Terminal Frame */}
-      <div className="relative z-10 flex w-full border-4 border-yellow-500/80 m-2 bg-black/20 backdrop-blur">
+      <div className="relative z-10 flex w-full border-4 border-yellow-500/80 m-2 bg-black/30">
         {/* Left Sidebar - Project List */}
         <div className="w-80 border-r-2 border-yellow-500/60 bg-black/80 flex flex-col font-mono" data-testid="sidebar">
           <div className="p-4 border-b-2 border-yellow-500/60">
@@ -415,7 +418,7 @@ const ChatInterface = () => {
           </div>
           
           {/* Terminal Input - Bottom */}
-          <div className="border-t-2 border-yellow-500/60 p-8 bg-black/80 backdrop-blur">
+          <div className="border-t-2 border-yellow-500/60 p-8 bg-black/85">
             <div className="max-w-5xl mx-auto">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-yellow-400 font-mono text-xl font-bold">C:\NEXUS&gt;</span>
