@@ -6,7 +6,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1678901764789-ecdff8d4db1e?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover',
     bgPosition: 'center',
-    overlay: 'rgba(0, 0, 0, 0.4)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5))',
     textGlow: 'rgba(255, 255, 255, 0.7)',
     vibe: 'golden autumn mountains with pine trees and lakeside bathed in sunlight—where mankind truly belongs in harmony with nature'
   },
@@ -16,7 +16,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1701189701778-7bb8d81549d8?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover', 
     bgPosition: 'center',
-    overlay: 'rgba(0, 0, 0, 0.35)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45))',
     textGlow: 'rgba(255, 215, 0, 0.6)',
     vibe: 'white-barked trees standing like protectors on the edge of wilderness—autumn magic with the unending beauty of seasonal change'
   },
@@ -26,7 +26,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1744571180458-ac007522e474?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover',
     bgPosition: 'center', 
-    overlay: 'rgba(0, 0, 0, 0.3)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4))',
     textGlow: 'rgba(173, 216, 230, 0.8)',
     vibe: 'nordic serenity by Eero Järnefelt—misty lakes and distant mountains where thoughts flow like watercolors'
   },
@@ -36,7 +36,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1755344533376-0e550441e546?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover',
     bgPosition: 'center',
-    overlay: 'rgba(0, 0, 0, 0.25)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.35))',
     textGlow: 'rgba(255, 192, 203, 0.7)',
     vibe: 'vibrant landscape with pink clouds and electric blue sky—reality painted in impossible colors'
   },
@@ -46,7 +46,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1667980898743-fcfe470b7d2a?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover',
     bgPosition: 'center',
-    overlay: 'rgba(0, 0, 0, 0.4)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5))',
     textGlow: 'rgba(135, 206, 235, 0.8)',
     vibe: 'abstract waterfall of consciousness—blue and white paint flowing like thought itself becoming visible'
   },
@@ -56,7 +56,7 @@ export const backdrops = {
     bg: 'url("https://images.unsplash.com/photo-1667980930112-4d1157f62892?w=1920&h=1080&fit=crop&crop=center")',
     bgSize: 'cover',
     bgPosition: 'center',
-    overlay: 'rgba(0, 0, 0, 0.35)',
+    overlay: 'linear-gradient(to bottom, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45))',
     textGlow: 'rgba(255, 165, 0, 0.8)',
     vibe: 'neural networks firing—green, blue, orange paint exploding across canvas like thoughts connecting in real-time'
   },
@@ -64,7 +64,7 @@ export const backdrops = {
   mistyRoss: {
     name: 'Bob\'s Clouds',
     bg: 'radial-gradient(circle at 40% 20%, #b0e0e6 0%, #e0ffff 40%, #87ceeb 70%, #4682b4 100%)',
-    overlay: 'rgba(0, 0, 0, 0.2)',
+    overlay: 'rgba(0, 0, 0, 0.15)',
     textGlow: 'rgba(255, 255, 255, 0.4)',
     vibe: 'happy little mountains, sky too soft to touch—like he painted it just to prove calm exists'
   },
@@ -72,7 +72,7 @@ export const backdrops = {
   santaFeSunset: {
     name: 'Santa Fe High',
     bg: 'linear-gradient(135deg, #ff69b4 0%, #9370db 40%, #ff8c00 70%, #d4a574 100%)',
-    overlay: 'rgba(0, 0, 0, 0.3)',
+    overlay: 'rgba(0, 0, 0, 0.25)',
     textGlow: 'rgba(255, 215, 0, 0.3)',
     vibe: 'mountains melt into magenta, purple-blue sky bleeding over ochre ridges—like you stepped off I-40 between Albuquerque and nowhere'
   }
