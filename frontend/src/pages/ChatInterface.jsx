@@ -525,6 +525,50 @@ const ChatInterface = () => {
           {/* Terminal Input - Bottom */}
           <div className="border-t-2 border-yellow-500/60 p-8 bg-black/85">
             <div className="max-w-5xl mx-auto">
+              {/* Action Buttons Row */}
+              <div className="flex gap-2 mb-3">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  accept="image/*,.pdf,.doc,.docx,.txt,.md,.json,.csv,.py,.js,.html,.css"
+                />
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  variant="ghost"
+                  size="sm"
+                  className="text-yellow-500/70 hover:text-yellow-400 hover:bg-yellow-500/10 border border-yellow-500/30 font-mono text-xs"
+                  title="Upload file or photo"
+                >
+                  <Upload className="w-4 h-4 mr-1" />
+                  FILE/PHOTO
+                </Button>
+                <Button
+                  onClick={handleScreenShare}
+                  variant="ghost"
+                  size="sm"
+                  className="text-yellow-500/70 hover:text-yellow-400 hover:bg-yellow-500/10 border border-yellow-500/30 font-mono text-xs"
+                  title="Share screen"
+                  disabled={isScreenSharing}
+                >
+                  <Monitor className="w-4 h-4 mr-1" />
+                  {isScreenSharing ? 'CAPTURING...' : 'SCREEN'}
+                </Button>
+                <Button
+                  onClick={handleCamera}
+                  variant="ghost"
+                  size="sm"
+                  className="text-yellow-500/70 hover:text-yellow-400 hover:bg-yellow-500/10 border border-yellow-500/30 font-mono text-xs"
+                  title="Use camera"
+                  disabled={isCameraOn}
+                >
+                  <Camera className="w-4 h-4 mr-1" />
+                  {isCameraOn ? 'CAPTURING...' : 'CAMERA'}
+                </Button>
+              </div>
+              
+              {/* Input Row */}
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-yellow-400 font-mono text-xl font-bold">C:\NEXUS&gt;</span>
                 <Input
