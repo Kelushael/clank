@@ -411,96 +411,45 @@ const ChatInterface = () => {
               </div>
             )}
 
-            {/* Input */}
-            <div className="border-t border-zinc-800/30 p-4 bg-black/40 backdrop-blur">
-              <div className="max-w-4xl mx-auto">
-                <div className="flex gap-2">
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="speak..."
-                    disabled={isStreaming || !currentConvo}
-                    className="flex-1 bg-black/60 border-zinc-800/50 text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-400/50 backdrop-blur"
-                    style={getTextGlowStyles()}
-                    data-testid="message-input"
-                  />
-                  <Button
-                    onClick={sendMessage}
-                    disabled={isStreaming || !currentConvo || !input.trim()}
-                    className="bg-black/80 hover:bg-zinc-900/80 text-emerald-400 border border-zinc-700/50 backdrop-blur"
-                    style={getTextGlowStyles()}
-                    data-testid="send-button"
-                  >
-                    {isStreaming ? '...' : '→'}
-                  </Button>
-                </div>
+          </div>
+          
+          {/* Terminal Input - Bottom */}
+          <div className="border-t-2 border-yellow-500/60 p-8 bg-black/80 backdrop-blur">
+            <div className="max-w-5xl mx-auto">
+              <div className="flex items-center gap-4 mb-4">
+                <span className="text-yellow-400 font-mono text-xl font-bold">C:\NEXUS&gt;</span>
+                <Input
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  placeholder="enter command..."
+                  disabled={isStreaming || !currentConvo}
+                  className="flex-1 bg-transparent border-b-2 border-yellow-500/40 text-yellow-300 placeholder:text-yellow-600/40 font-mono text-lg focus:border-yellow-400 focus:outline-none rounded-none px-2"
+                  data-testid="message-input"
+                />
+                <Button
+                  onClick={sendMessage}
+                  disabled={isStreaming || !currentConvo || !input.trim()}
+                  className="bg-yellow-500/20 hover:bg-yellow-400/30 text-yellow-400 border-2 border-yellow-500/60 font-mono px-8"
+                  data-testid="send-button"
+                >
+                  {isStreaming ? 'PROCESSING...' : 'EXECUTE'}
+                </Button>
+              </div>
+              
+              {/* Download Link */}
+              <div className="text-center pt-4 border-t border-yellow-500/20">
+                <a 
+                  href="https://github.com/emergent-nexus/releases/latest/download/NEXUS-Setup.exe"
+                  className="text-yellow-500/70 hover:text-yellow-400 text-sm font-mono underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  DOWNLOAD NEXUS INSTALLER (Windows)
+                </a>
               </div>
             </div>
-          </TabsContent>
-
-          <TabsContent value="files" className="flex-1 flex flex-col m-0">
-            <div className="flex-1 overflow-auto p-6">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-xl font-bold text-zinc-100 mb-2" style={getTextGlowStyles()}>File Analysis</h2>
-                <p className="text-zinc-400 mb-6" style={getTextGlowStyles()}>
-                  Upload files for analysis. Images, documents, code - just drop them and ask questions.
-                </p>
-                
-                <FileUploader onFileAnalysis={handleFileAnalysis} />
-                
-                <div className="mt-8 p-4 rounded-lg bg-black/30 border border-zinc-800/50 backdrop-blur">
-                  <h3 className="text-sm font-medium text-zinc-300 mb-2">Pro Tips:</h3>
-                  <ul className="text-xs text-zinc-500 space-y-1">
-                    <li>• After uploading, just ask &quot;What&apos;s in this image?&quot; or &quot;Summarize this document&quot;</li>
-                    <li>• Clank automatically understands file context and routes to analysis</li>
-                    <li>• Screenshots, diagrams, code files, PDFs - all supported</li>
-                    <li>• No need to specify file names - just speak naturally</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="commander" className="flex-1 flex flex-col m-0">
-            <div className="flex-1 overflow-auto p-6">
-              <div className="max-w-4xl mx-auto">
-                <h2 className="text-xl font-bold text-slate-800 mb-4">Desktop Commander</h2>
-                <p className="text-slate-600 mb-6">Execute commands in the sandboxed workspace (/app/workspace)</p>
-                
-                <div className="mb-6">
-                  <div className="flex gap-2">
-                    <Input
-                      value={commandInput}
-                      onChange={(e) => setCommandInput(e.target.value)}
-                      placeholder="Enter command (e.g., ls -la)"
-                      className="flex-1 font-mono"
-                      data-testid="command-input"
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          executeCommand();
-                        }
-                      }}
-                    />
-                    <Button onClick={executeCommand} data-testid="execute-command-button">
-                      Execute
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  {commandLogs.map((log, idx) => (
-                    <Card key={idx} className="p-4 bg-slate-900 text-green-400 font-mono text-sm" data-testid={`command-log-${idx}`}>
-                      <div className="text-blue-400 mb-2">$ {log.command}</div>
-                      <pre className="whitespace-pre-wrap">{log.output}</pre>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </div>
+          </div>
       </div>
     </div>
   );
