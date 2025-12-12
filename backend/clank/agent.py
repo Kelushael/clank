@@ -186,7 +186,7 @@ Respond as Clank would - direct, intelligent, collaborative.
     
     async def _execute_plan(self, decision: PlannerDecision, intent: ParsedIntent, 
                           conversation_id: str) -> str:
-        \"\"\"Execute a plan with skill calls\"\"\"
+        """Execute a plan with skill calls"""
         
         execution_context = ExecutionContext(
             workspace_root=self.workspace_root,
@@ -207,30 +207,30 @@ Respond as Clank would - direct, intelligent, collaborative.
             # Format the response naturally
             response_parts = []
             
-            if result.status == \"SUCCESS\":
+            if result.status == "SUCCESS":
                 # Include the generated content/output
-                if \"generated_code\" in result.details:
-                    response_parts.append(result.details[\"generated_code\"])
-                elif \"output\" in result.details:
-                    response_parts.append(f\"```\\n{result.details['output']}\\n```\")
-                elif \"content\" in result.details:
-                    response_parts.append(result.details[\"content\"])
+                if "generated_code" in result.details:
+                    response_parts.append(result.details["generated_code"])
+                elif "output" in result.details:
+                    response_parts.append(f"```\n{result.details['output']}\n```")
+                elif "content" in result.details:
+                    response_parts.append(result.details["content"])
                 else:
                     response_parts.append(result.message)
                 
                 # Add suggestions if available
                 if result.next_suggestions:
-                    response_parts.append(\"\\n*What's next?*\")
+                    response_parts.append("\n*What's next?*")
                     for suggestion in result.next_suggestions[:2]:
-                        response_parts.append(f\"- {suggestion}\")
+                        response_parts.append(f"- {suggestion}")
             else:
-                response_parts.append(f\"⚠️ {result.message}\")
+                response_parts.append(f"⚠️ {result.message}")
             
-            return \"\\n\".join(response_parts)
+            return "\n".join(response_parts)
             
         except Exception as e:
-            self.logger.error(f\"Skill execution failed: {e}\")
-            return f\"I ran into an issue executing that: {str(e)}\""
+            self.logger.error(f"Skill execution failed: {e}")
+            return f"I ran into an issue executing that: {str(e)}""
     
     def handle_confirmation_choice(self, choice: str, original_intent: ParsedIntent, 
                                  original_decision: PlannerDecision) -> str:
