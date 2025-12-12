@@ -7,7 +7,7 @@ import websocket
 import threading
 
 class NexusAPITester:
-    def __init__(self, base_url="https://local-nexus-1.preview.emergentagent.com"):
+    def __init__(self, base_url="https://hybrid-brain.preview.emergentagent.com"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api"
         self.tests_run = 0
