@@ -10,6 +10,9 @@ from .types import (
 )
 from .intent_classifier import IntentClassifier
 from .planner import ClankPlanner
+from .skills.code_generator import CodeGeneratorSkill
+from .skills.terminal_ops import TerminalOperationsSkill
+from .skills.file_ops import FileOperationsSkill
 
 class ClankAgent:
     """
@@ -26,8 +29,9 @@ class ClankAgent:
         self.intent_classifier = IntentClassifier(llm_chat)
         self.planner = ClankPlanner()
         
-        # Skills registry (will be populated)
+        # Skills registry
         self.skills = {}
+        self._initialize_skills()
         
         # Identity and memory
         self.identity = {
@@ -40,6 +44,15 @@ class ClankAgent:
                 "communicates in natural language only"
             ]
         }
+    
+    def _initialize_skills(self):
+        \"\"\"Initialize MCP skills invisibly\"\"\"
+        self.skills = {
+            IntentType.CODE_GENERATION: CodeGeneratorSkill(self.llm),
+            IntentType.TERMINAL_OPERATION: TerminalOperationsSkill(),
+            IntentType.FILE_OPERATION: FileOperationsSkill()
+        }
+        self.logger.info(f\"Initialized {len(self.skills)} skills\")
     
     async def process_message(self, user_message: str, conversation_id: str, 
                             conversation_context: List[Dict[str, str]] = None,
