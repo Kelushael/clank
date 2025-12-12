@@ -1,0 +1,45 @@
+{
+  "appId": "com.emergent.nexus",
+  "productName": "NEXUS",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "electron/**/*",
+    "frontend/build/**/*",
+    "!node_modules"
+  ],
+  "extraResources": [
+    {
+      "from": "backend/dist",
+      "to": "backend",
+      "filter": ["**/*"]
+    },
+    {
+      "from": "models",
+      "to": "models",
+      "filter": ["*.gguf"]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "electron/icon.ico"
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "NEXUS",
+    "installerIcon": "electron/icon.ico",
+    "uninstallerIcon": "electron/icon.ico",
+    "installerHeaderIcon": "electron/icon.ico",
+    "displayLanguageSelector": false,
+    "perMachine": false
+  }
+}

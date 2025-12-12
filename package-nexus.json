@@ -1,0 +1,22 @@
+{
+  "name": "nexus-desktop",
+  "version": "1.0.0",
+  "description": "NEXUS - Sovereign AI Desktop Application",
+  "main": "electron/main.js",
+  "scripts": {
+    "electron": "electron .",
+    "build:frontend": "cd frontend && yarn build",
+    "build:backend": "cd backend && pyinstaller server.spec",
+    "build:electron": "electron-builder --win --x64",
+    "build:all": "npm run build:frontend && npm run build:backend && npm run build:electron",
+    "package": "npm run build:all"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "@wonderwhy-er/desktop-commander": "latest",
+    "@modelcontextprotocol/sdk": "latest"
+  }
+}
