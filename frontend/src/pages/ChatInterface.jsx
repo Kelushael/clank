@@ -238,6 +238,111 @@ const ChatInterface = () => {
     }
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const res = await axios.post(`${API}/files/upload`, formData);
+      toast.success(`Uploaded ${file.name}`);
+      
+      // Add message about uploaded file
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `📎 File uploaded: ${file.name}\n\nYou can now ask me questions about this file!`
+      }]);
+    } catch (error) {
+      toast.error('File upload failed');
+    }
+  };
+
+  const handleScreenShare = async () => {
+    try {
+      if (!isScreenSharing) {
+        const stream = await navigator.mediaDevices.getDisplayMedia({ 
+          video: true 
+        });
+        
+        // Capture screenshot from stream
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
+        
+        setTimeout(async () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0);
+          
+          canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'screenshot.png');
+            
+            const res = await axios.post(`${API}/files/upload`, formData);
+            toast.success('Screen captured');
+            
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: `📸 Screen captured! I can see what's on your screen. What would you like to know about it?`
+            }]);
+            
+            stream.getTracks().forEach(track => track.stop());
+          }, 'image/png');
+        }, 500);
+        
+        setIsScreenSharing(true);
+        setTimeout(() => setIsScreenSharing(false), 1000);
+      }
+    } catch (error) {
+      toast.error('Screen share not available');
+    }
+  };
+
+  const handleCamera = async () => {
+    try {
+      if (!isCameraOn) {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: { facingMode: 'user' } 
+        });
+        
+        // Capture photo from camera
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
+        
+        setTimeout(async () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas.getContext('2d').drawImage(video, 0, 0);
+          
+          canvas.toBlob(async (blob) => {
+            const formData = new FormData();
+            formData.append('file', blob, 'camera-capture.jpg');
+            
+            const res = await axios.post(`${API}/files/upload`, formData);
+            toast.success('Photo captured');
+            
+            setMessages(prev => [...prev, {
+              role: 'assistant',
+              content: `📷 Camera photo captured! I can see you. What can I help with?`
+            }]);
+            
+            stream.getTracks().forEach(track => track.stop());
+          }, 'image/jpeg');
+        }, 500);
+        
+        setIsCameraOn(true);
+        setTimeout(() => setIsCameraOn(false), 1000);
+      }
+    } catch (error) {
+      toast.error('Camera not available');
+    }
+  };
+
   return (
     <div className="flex h-screen" style={getThemeStyles()} data-testid="chat-interface">
       {/* Backdrop overlay - darker but NO blur so art is visible */}
