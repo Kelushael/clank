@@ -450,6 +450,7 @@ const ChatInterface = () => {
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
   );
