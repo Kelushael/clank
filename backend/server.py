@@ -239,20 +239,33 @@ async def websocket_chat(websocket: WebSocket, conversation_id: str):
             )
             
             if model_provider == "cloud":
-                chat = get_chat_instance()
-                user_msg_obj = UserMessage(text=user_message)
-                
                 try:
-                    response = await chat.send_message(user_msg_obj)
-                    await websocket.send_json({"type": "stream", "content": response})
+                    # Route through Clank for Desktop Commander capabilities
+                    clank = get_clank_agent()
+                    
+                    # Get conversation context
+                    messages = convo.get('messages', [])
+                    
+                    # Process through Clank (intent classification + skill execution)
+                    clank_response = await clank.process_message(
+                        user_message=user_message,
+                        conversation_id=conversation_id,
+                        conversation_context=messages[-10:],  # Last 10 messages
+                        user_preferences={}
+                    )
+                    
+                    # Stream the response
+                    response_text = clank_response.content
+                    await websocket.send_json({"type": "stream", "content": response_text})
                     await websocket.send_json({"type": "done"})
                     
-                    assistant_msg = Message(role="assistant", content=response)
+                    assistant_msg = Message(role="assistant", content=response_text)
                     await db.conversations.update_one(
                         {"id": conversation_id},
                         {"$push": {"messages": assistant_msg.model_dump()}, "$set": {"updated_at": datetime.now(timezone.utc).isoformat()}}
                     )
                 except Exception as e:
+                    logging.error(f"Clank processing error: {e}")
                     await websocket.send_json({"type": "error", "content": f"Consciousness bridge error: {str(e)}"})
             else:
                 model = init_local_model()
