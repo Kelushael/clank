@@ -628,12 +628,13 @@ const ChatInterface = () => {
               {/* Download Link */}
               <div className="text-center pt-4 border-t border-yellow-500/20">
                 <a 
-                  href="https://github.com/emergent-nexus/releases/latest/download/NEXUS-Setup.exe"
+                  href="https://github.com/emergent-nexus/nexus/releases"
                   className="text-yellow-500/70 hover:text-yellow-400 text-sm font-mono underline"
                   target="_blank"
                   rel="noopener noreferrer"
+                  title="Desktop installer coming soon - bookmark this link"
                 >
-                  DOWNLOAD NEXUS INSTALLER (Windows)
+                  DOWNLOAD NEXUS INSTALLER (Windows) - Coming Soon
                 </a>
               </div>
             </div>
