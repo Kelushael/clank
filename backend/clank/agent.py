@@ -46,13 +46,13 @@ class ClankAgent:
         }
     
     def _initialize_skills(self):
-        \"\"\"Initialize MCP skills invisibly\"\"\"
+        """Initialize MCP skills invisibly"""
         self.skills = {
             IntentType.CODE_GENERATION: CodeGeneratorSkill(self.llm),
             IntentType.TERMINAL_OPERATION: TerminalOperationsSkill(),
             IntentType.FILE_OPERATION: FileOperationsSkill()
         }
-        self.logger.info(f\"Initialized {len(self.skills)} skills\")
+        self.logger.info(f"Initialized {len(self.skills)} skills")
     
     async def process_message(self, user_message: str, conversation_id: str, 
                             conversation_context: List[Dict[str, str]] = None,
