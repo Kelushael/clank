@@ -230,7 +230,7 @@ Respond as Clank would - direct, intelligent, collaborative.
             
         except Exception as e:
             self.logger.error(f"Skill execution failed: {e}")
-            return f"I ran into an issue executing that: {str(e)}""
+            return f"I ran into an issue executing that: {str(e)}"
     
     def handle_confirmation_choice(self, choice: str, original_intent: ParsedIntent, 
                                  original_decision: PlannerDecision) -> str:
